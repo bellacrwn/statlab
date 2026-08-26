@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StatLab — Nonparametric Tests</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="hero">
+    <nav class="nav container">
+      <div class="brand"><span>STAT</span>LAB</div>
+      <span class="backend-status" id="backendStatus">Checking backend...</span>
+    </nav>
+
+    <div class="hero-content container">
+      <div>
+        <p class="eyebrow">STATISTICS PROJECT</p>
+        <h1>Nonparametric<br><span>Test Laboratory.</span></h1>
+        <p class="hero-copy">
+          Analyze data with the Sign Test, Wilcoxon Signed-Rank Test,
+          and Kruskal-Wallis H Test using a clean web interface connected
+          to a VB.NET backend.
+        </p>
+      </div>
+      <div class="hero-card">
+        <div class="hero-number">03</div>
+        <div>Statistical tests</div>
+        <small>One connected application</small>
+      </div>
+    </div>
+  </header>
+
+  <main class="container app-shell">
+    <section class="test-selector">
+      <button class="test-tab active" data-test="sign">
+        <span>01</span>
+        <strong>Sign Test</strong>
+        <small>One-sample median</small>
+      </button>
+
+      <button class="test-tab" data-test="signed-rank">
+        <span>02</span>
+        <strong>Wilcoxon Signed-Rank</strong>
+        <small>Paired / one-sample</small>
+      </button>
+
+      <button class="test-tab" data-test="kruskal-wallis">
+        <span>03</span>
+        <strong>Kruskal-Wallis</strong>
+        <small>Three or more groups</small>
+      </button>
+    </section>
+
+    <section class="workspace">
+      <div class="panel input-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">INPUT</p>
+            <h2 id="testTitle">Sign Test</h2>
+          </div>
+          <span class="method-pill" id="methodPill">Median</span>
+        </div>
+
+        <div id="description" class="description">
+          Tests whether the population median differs from a hypothesized median.
+        </div>
+
+        <div class="field-row">
+          <label>
+            Significance level (α)
+            <select id="alpha">
+              <option value="0.10">0.10</option>
+              <option value="0.05" selected>0.05</option>
+              <option value="0.01">0.01</option>
+            </select>
+          </label>
+
+          <label>
+            Hypothesized median
+            <input id="median" type="number" value="50" step="any">
+          </label>
+        </div>
+
+        <div id="singleInputArea">
+          <label>
+            Observations
+            <textarea id="values" placeholder="Example: 45, 51, 62, 48, 55, 59, 42"></textarea>
+          </label>
+          <p class="hint">Separate values with commas, spaces, or new lines.</p>
+        </div>
+
+        <div id="groupInputArea" class="hidden">
+          <label>
+            Group 1
+            <textarea class="group-box" placeholder="Example: 12, 15, 13, 14"></textarea>
+          </label>
+          <label>
+            Group 2
+            <textarea class="group-box" placeholder="Example: 19, 17, 20, 18"></textarea>
+          </label>
+          <label>
+            Group 3
+            <textarea class="group-box" placeholder="Example: 10, 11, 9, 12"></textarea>
+          </label>
+          <button id="addGroup" class="secondary-btn">+ Add another group</button>
+        </div>
+
+        <div class="actions">
+          <button id="analyzeBtn" class="primary-btn">Run Analysis <span>→</span></button>
+          <button id="sampleBtn" class="ghost-btn">Load sample</button>
+          <button id="clearBtn" class="ghost-btn">Clear</button>
+        </div>
+
+        <div id="errorBox" class="error-box hidden"></div>
+      </div>
+
+      <div class="panel result-panel">
+        <div class="panel-heading">
+          <div>
+            <p class="eyebrow">RESULT</p>
+            <h2>Statistical Output</h2>
+          </div>
+          <div id="decisionBadge" class="decision-badge neutral">Waiting</div>
+        </div>
+
+        <div id="emptyResult" class="empty-result">
+          <div class="empty-icon">Σ</div>
+          <h3>Your result will appear here.</h3>
+          <p>Enter your data and click <b>Run Analysis</b>.</p>
+        </div>
+
+        <div id="resultContent" class="hidden">
+          <div class="stat-grid" id="statGrid"></div>
+
+          <div class="result-section">
+            <h3>Decision</h3>
+            <div class="decision-card" id="decisionCard"></div>
+          </div>
+
+          <div class="result-section">
+            <h3>Interpretation</h3>
+            <p id="conclusion"></p>
+          </div>
+
+          <div id="groupTableSection" class="result-section hidden">
+            <h3>Group Summary</h3>
+            <div class="table-wrap">
+              <table>
+                <thead>
+                  <tr><th>Group</th><th>n</th><th>Rank Sum</th><th>Mean</th></tr>
+                </thead>
+                <tbody id="groupTableBody"></tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="info-section">
+      <div class="info-card">
+        <span>01</span>
+        <h3>Sign Test</h3>
+        <p>Uses only the direction of differences above or below a hypothesized median.</p>
+      </div>
+      <div class="info-card">
+        <span>02</span>
+        <h3>Signed-Rank</h3>
+        <p>Uses both the direction and magnitude of non-zero differences by ranking them.</p>
+      </div>
+      <div class="info-card">
+        <span>03</span>
+        <h3>Kruskal-Wallis</h3>
+        <p>Compares two or more independent groups using ranks rather than raw values.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <strong>STATLAB</strong>
+      <span>Frontend: HTML • CSS • JavaScript &nbsp; | &nbsp; Backend: VB.NET</span>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
