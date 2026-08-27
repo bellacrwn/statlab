@@ -88,13 +88,35 @@ PORT=8080 dotnet run
 ### Docker
 ```bash
 docker build -t statlab:2.0 .
-docker run -p 5000:5000 statlab:2.0
+
+# The image defaults to Render's 10000 port:
+docker run --rm -p 5000:10000 statlab:2.0
+
+# Or override the container port for local development:
+docker run --rm -e PORT=5000 -p 5000:5000 statlab:2.0
 
 # or
 docker-compose up --build
 ```
 
-### Open
+### Deploy to Render
+This repository includes a `Dockerfile` and `render.yaml` for a Docker-based Render web service.
+
+#### Blueprint method (recommended)
+1. Push the repository to GitHub.
+2. In Render, choose **New + → Blueprint** and select the repository.
+3. Review the `statlab` web service and deploy it.
+
+#### Dashboard method
+1. Choose **New + → Web Service**, connect this repository, and select **Docker** as the runtime.
+2. Leave the Dockerfile path as `./Dockerfile` and the Docker context as `.`.
+3. Leave the Build Command and Start Command empty; the Dockerfile supplies both.
+4. Set the health check path to `/api/health`.
+5. Do not hard-code a different `PORT` value. Render provides `PORT` (normally `10000`) and the app binds to that port on all network interfaces.
+
+The important Render requirements are already handled: the container exposes port `10000`, the server reads `PORT`, and it does not bind only to `localhost`. After deployment, open the Render URL and verify `https://YOUR-SERVICE.onrender.com/api/health` returns JSON with `"status":"ok"`.
+
+### Open locally
 Navigate to `http://localhost:5000` — backend serves frontend at same origin.  
 No need to open `wwwroot/index.html` via file://, but it now falls back to localhost API if you do.
 

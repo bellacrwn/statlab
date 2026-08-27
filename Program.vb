@@ -22,18 +22,19 @@ Module Program
         If String.IsNullOrWhiteSpace(port) Then port = Environment.GetEnvironmentVariable("STATLAB_PORT")
         If String.IsNullOrWhiteSpace(port) Then port = "5000"
 
-        Dim prefix = $"http://localhost:{port}/"
+        ' Render and other container platforms route traffic to the container
+        ' through its network interface, so localhost is not sufficient here.
+        ' HttpListener uses + as its all-interface wildcard host.
+        Dim bindHost = Environment.GetEnvironmentVariable("STATLAB_HOST")
+        If String.IsNullOrWhiteSpace(bindHost) Then bindHost = "+"
+        Dim prefix = $"http://{bindHost}:{port}/"
         Dim listener As New HttpListener()
         Try
             listener.Prefixes.Add(prefix)
             listener.Start()
         Catch ex As Exception
             Logger.Error($"Failed to start on {prefix}: {ex.Message}")
-            Logger.Info("Trying fallback http://localhost:5000/")
-            listener = New HttpListener()
-            listener.Prefixes.Add("http://localhost:5000/")
-            listener.Start()
-            prefix = "http://localhost:5000/"
+            Throw
         End Try
 
         Console.WriteLine()

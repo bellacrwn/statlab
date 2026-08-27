@@ -7,8 +7,5 @@ services:
     environment:
       - PORT=5000
     restart: unless-stopped
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:5000/api/health"]
-      interval: 30s
-      timeout: 5s
-      retries: 3
+    # The .NET runtime image does not include curl. Render performs its own
+    # health check using /api/health, so no container healthcheck is needed here.
