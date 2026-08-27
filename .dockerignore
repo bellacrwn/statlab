@@ -1,0 +1,9 @@
+# Do not send the archived duplicate project to the Docker build context.
+Desktop/
+
+# Git metadata and local build artifacts are not needed in the image.
+.git/
+bin/
+obj/
+publish/
+out/

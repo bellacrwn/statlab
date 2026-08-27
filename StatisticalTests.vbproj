@@ -17,7 +17,14 @@
     <Version>2.0.0</Version>
   </PropertyGroup>
 
+  <!-- Desktop contains an archived copy of the project. Exclude it from the
+       SDK's recursive default compile globs so those files are not compiled
+       alongside the active source files in the repository root. -->
   <ItemGroup>
+    <Compile Remove="Desktop\**" />
+    <EmbeddedResource Remove="Desktop\**" />
+    <Content Remove="Desktop\**" />
+    <None Remove="Desktop\**" />
     <Content Include="wwwroot\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
