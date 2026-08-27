@@ -1,0 +1,32 @@
+# .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.userosscache
+*.dbmdl
+*.jfm
+
+# Build
+publish/
+out/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Env
+.env
+
+# IDE
+.idea/
+.vscode/settings.json
+
+# Node (if any tooling added later)
+node_modules/
+dist/

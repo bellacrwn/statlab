@@ -10,9 +10,13 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
     <LangVersion>latest</LangVersion>
-    <Description>StatLab 2.0 — Nonparametric Test Laboratory</Description>
+    <PublishSingleFile>false</PublishSingleFile>
+    <InvariantGlobalization>false</InvariantGlobalization>
+    <Description>StatLab — Nonparametric Statistical Tests Laboratory (VB.NET + Web)</Description>
+    <Authors>StatLab Contributors</Authors>
     <Version>2.0.0</Version>
   </PropertyGroup>
+
   <ItemGroup>
     <Content Include="wwwroot\**\*" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
   </ItemGroup>
