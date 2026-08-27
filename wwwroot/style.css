@@ -167,7 +167,7 @@ a { color: inherit; }
 /* App */
 .app { margin-top: -28px; position: relative; z-index: 2; }
 .test-selector {
-  display: grid; grid-template-columns: repeat(5,1fr);
+  display: grid; grid-template-columns: repeat(3,1fr);
   gap: 1px; background: var(--line); border: 1px solid var(--line);
   border-radius: var(--radius); overflow: hidden; box-shadow: var(--shadow);
 }

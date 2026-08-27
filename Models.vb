@@ -40,7 +40,7 @@ Namespace StatLab.Models
                 If Values IsNot Nothing AndAlso Values.Any(Function(v) Double.IsNaN(v) OrElse Double.IsInfinity(v)) Then
                     errors.Add("Observations contain invalid numbers.")
                 End If
-            ElseIf t = "kruskal-wallis" OrElse t = "kruskal" OrElse t = "mann-whitney" OrElse t = "mannwhitney" OrElse t = "friedman" Then
+            ElseIf t = "kruskal-wallis" OrElse t = "kruskal" Then
                 If Groups Is Nothing OrElse Groups.Count < 2 Then
                     errors.Add("At least two groups are required for this test.")
                 End If

@@ -1,6 +1,6 @@
 # StatLab 2.0 — Nonparametric Test Laboratory
 
-> A production-grade, polished statistics workbench for nonparametric inference — now with 5 tests, CSV drag-drop, visualizations, effect sizes, and a hardened VB.NET backend.
+> A production-grade, polished statistics workbench for nonparametric inference — now with 3 tests, CSV drag-drop, visualizations, effect sizes, and a hardened VB.NET backend.
 
 ![Version](https://img.shields.io/badge/version-2.0.0-accent)
 ![.NET](https://img.shields.io/badge/.NET-8.0-512BD4)
@@ -11,12 +11,10 @@
 
 ## ✨ What's New in 2.0
 
-**From 3 → 5 tests:**
+**Available tests:**
 - **Sign Test** — exact binomial, one-sample median
 - **Wilcoxon Signed-Rank** — tie-corrected, continuity correction, effect r
 - **Kruskal-Wallis H** — χ² approx, tie correction, η² effect
-- **Mann-Whitney U** (NEW) — two independent groups, rank-biserial r
-- **Friedman Test** (NEW) — k related / repeated measures, Kendall's W
 
 **Frontend overhaul:**
 - Dark / light theme, fully responsive, accessible
@@ -51,12 +49,6 @@ Handles ties by exclusion, reports positive/negative/ties, effect = |pos-neg|/n.
 ### Kruskal-Wallis H
 `H = 12/(N(N+1)) Σ R_i²/n_i - 3(N+1)` with tie correction `C = 1 - Σ(t³-t)/(N³-N)`  
 `H/C ~ χ²(k-1)`. Effect `η² = (H - k + 1)/(N - k)` (0.01 small, 0.06 medium, 0.14 large)
-
-### Mann-Whitney U
-`U = n1*n2 + n1(n1+1)/2 - R1`, normal approx with tie correction, effect `r` and rank-biserial `r_rb = 1 - 2U/(n1 n2)`
-
-### Friedman
-`χ²_F = 12/(nk(k+1)) Σ R_j² - 3n(k+1)`, Kendall's W = χ²_F / (n(k-1))
 
 > **Note:** For very small samples or production research, cross-check with R / SPSS / SciPy. This app is student-friendly but now includes tie corrections and effect sizes.
 
@@ -127,7 +119,7 @@ No need to open `wwwroot/index.html` via file://, but it now falls back to local
 ### POST /api/analyze
 ```json
 {
-  "test": "sign | signed-rank | kruskal-wallis | mann-whitney | friedman",
+  "test": "sign | signed-rank | kruskal-wallis",
   "values": [45, 51, 62],
   "groups": [[12,15,13], [19,17,20]],
   "median": 50,
@@ -159,7 +151,7 @@ StatLab/
 ├── Models.vb                # DTOs + validation
 ├── StatisticalTests.vbproj  # .NET 8 project
 ├── wwwroot/
-│   ├── index.html           # Modern UI, 5 tabs, drop zone, charts
+│   ├── index.html           # Modern UI, 3 tabs, drop zone, charts
 │   ├── style.css            # Design system, dark/light, responsive
 │   └── script.js            # State, CSV parse, charts, history, export
 ├── Dockerfile

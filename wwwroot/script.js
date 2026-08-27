@@ -35,25 +35,6 @@ const config = {
     needsGroups: true,
     groupsMin: 3
   },
-  "mann-whitney": {
-    title: "Mann-Whitney U Test",
-    pill: "2 independent • Rank-biserial",
-    description: "Compares two independent groups. Equivalent to Wilcoxon rank-sum. Tests stochastic superiority.",
-    sample: "",
-    needsMedian: false,
-    needsGroups: true,
-    groupsMin: 2,
-    groupsMax: 2
-  },
-  "friedman": {
-    title: "Friedman Test",
-    pill: "k related • Kendall's W",
-    description: "Repeated measures nonparametric ANOVA. Ranks within blocks (subjects). For randomized block designs.",
-    sample: "",
-    needsMedian: false,
-    needsGroups: true,
-    groupsMin: 3
-  }
 };
 
 // DOM
@@ -158,17 +139,8 @@ function setTest(test) {
   groupInputArea.classList.toggle("hidden", !needsGroups);
   medianField.classList.toggle("hidden", !c.needsMedian);
 
-  // Mann-Whitney only 2 groups, hide add button
-  if (test === "mann-whitney") {
-    addGroupBtn.classList.add("hidden");
-    $("#groupHint").textContent = "Exactly 2 independent groups required for Mann-Whitney U.";
-  } else if (test === "friedman") {
-    addGroupBtn.classList.remove("hidden");
-    $("#groupHint").textContent = "k related groups with equal n (blocks). Each position across groups = same subject/block.";
-  } else {
-    addGroupBtn.classList.remove("hidden");
-    $("#groupHint").textContent = "Each group = independent sample. At least 3 recommended for Kruskal-Wallis.";
-  }
+  addGroupBtn.classList.remove("hidden");
+  $("#groupHint").textContent = "Each group = independent sample. At least 3 are recommended for Kruskal-Wallis.";
 
   if (needsGroups && groupsContainer.children.length === 0) {
     initGroups(test);
@@ -234,15 +206,6 @@ sampleBtn.addEventListener("click", () => {
         "19, 17, 20, 18, 21, 22, 19",
         "10, 11, 9, 12, 8, 10, 9"
       ],
-      "mann-whitney": [
-        "12, 15, 13, 14, 16, 18, 20",
-        "19, 17, 20, 18, 21, 22, 24"
-      ],
-      "friedman": [
-        "12, 15, 13, 14, 16",
-        "19, 17, 20, 18, 21",
-        "10, 11, 9, 12, 8"
-      ]
     };
     const s = samples[state.test] || samples["kruskal-wallis"];
     // ensure enough groups
@@ -278,10 +241,6 @@ clearGroupsBtn?.addEventListener("click", () => {
 });
 
 addGroupBtn.addEventListener("click", () => {
-  if (state.test === "mann-whitney" && groupsContainer.children.length >= 2) {
-    showWarning("Mann-Whitney requires exactly 2 groups.");
-    return;
-  }
   addGroupUI();
 });
 
@@ -374,18 +333,6 @@ analyzeBtn.addEventListener("click", async () => {
       showError("Please enter at least two groups with numeric data.");
       return;
     }
-    if (state.test === "mann-whitney" && groups.length !== 2) {
-      showError("Mann-Whitney U requires exactly 2 groups.");
-      return;
-    }
-    if (state.test === "friedman") {
-      const n = groups[0].length;
-      if (!groups.every(g => g.length === n)) {
-        showError("Friedman test requires equal group sizes (same number of blocks).");
-        return;
-      }
-    }
-
     payload.groups = groups;
   } else {
     const vals = parseNumbers(values.value);
@@ -452,21 +399,6 @@ function renderResult(data, payload) {
     items.push(["df", data.degreesOfFreedom]);
     items.push(["p-value", formatNumber(data.pValue)]);
     items.push(["η²", formatNumber(data.effectSize)]);
-  } else if (data.test === "Mann-Whitney U Test") {
-    items.push(["n₁ / n₂", `${data.n1} / ${data.n2}`]);
-    items.push(["U₁ / U₂", `${formatNumber(data.u1)} / ${formatNumber(data.u2)}`]);
-    items.push(["U (min)", formatNumber(data.statistic)]);
-    items.push(["z", formatNumber(data.z)]);
-    items.push(["p-value", formatNumber(data.pValue)]);
-    items.push(["r", formatNumber(data.effectSize)]);
-    items.push(["Rank-biserial", formatNumber(data.rankBiserial)]);
-  } else if (data.test === "Friedman Test") {
-    items.push(["Groups k", data.groups]);
-    items.push(["Blocks n", data.blocks]);
-    items.push(["χ²_F", formatNumber(data.statistic)]);
-    items.push(["df", data.degreesOfFreedom]);
-    items.push(["p-value", formatNumber(data.pValue)]);
-    items.push(["Kendall W", formatNumber(data.effectSize)]);
   }
 
   statGrid.innerHTML = items.map(([label, val]) => `
@@ -484,8 +416,6 @@ function renderResult(data, payload) {
     const es = data.effectSize;
     if (data.test.includes("Kruskal")) {
       interp = es < 0.01 ? "negligible" : es < 0.06 ? "small" : es < 0.14 ? "medium" : "large";
-    } else if (data.test.includes("Friedman")) {
-      interp = es < 0.1 ? "small" : es < 0.3 ? "moderate" : es < 0.5 ? "large" : "very large";
     } else {
       interp = es < 0.1 ? "negligible" : es < 0.3 ? "small" : es < 0.5 ? "medium" : "large";
     }
@@ -754,7 +684,7 @@ function renderHistory() {
       if (entry.payload.values) {
         setTest("sign"); // will be overwritten
         // try to infer test
-        const map = {"Sign Test":"sign","Wilcoxon Signed-Rank Test":"signed-rank","Kruskal-Wallis H Test":"kruskal-wallis","Mann-Whitney U Test":"mann-whitney","Friedman Test":"friedman"};
+        const map = {"Sign Test":"sign","Wilcoxon Signed-Rank Test":"signed-rank","Kruskal-Wallis H Test":"kruskal-wallis"};
         const testId = map[entry.test] || "sign";
         setTest(testId);
         if (entry.payload.values) {
@@ -763,7 +693,7 @@ function renderHistory() {
         }
       }
       if (entry.payload.groups) {
-        const map = {"Sign Test":"sign","Wilcoxon Signed-Rank Test":"signed-rank","Kruskal-Wallis H Test":"kruskal-wallis","Mann-Whitney U Test":"mann-whitney","Friedman Test":"friedman"};
+        const map = {"Sign Test":"sign","Wilcoxon Signed-Rank Test":"signed-rank","Kruskal-Wallis H Test":"kruskal-wallis"};
         const testId = map[entry.test] || "kruskal-wallis";
         setTest(testId);
         groupsContainer.innerHTML = "";
@@ -840,7 +770,7 @@ async function checkBackend() {
     const data = await res.json();
     if (res.ok && data.status === "ok") {
       dot.className = "status-dot online";
-      txt.textContent = `● VB.NET online • ${data.tests?.length || 5} tests`;
+      txt.textContent = `● VB.NET online • ${data.tests?.length || 3} tests`;
       backendStatus.style.color = "var(--success)";
     } else throw new Error();
   } catch {

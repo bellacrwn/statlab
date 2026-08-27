@@ -118,7 +118,7 @@ Module Program
                     HandleTestsList(response)
 
                 Case "/api/version"
-                    WriteJson(response, New With {.name = "StatLab", .version = "2.0.0", .tests = New String() {"sign", "signed-rank", "kruskal-wallis", "mann-whitney", "friedman"}}, 200)
+                    WriteJson(response, New With {.name = "StatLab", .version = "2.0.0", .tests = New String() {"sign", "signed-rank", "kruskal-wallis"}}, 200)
 
                 Case Else
                     ServeStaticFile(request, response)
@@ -148,9 +148,7 @@ Module Program
             .tests = New Object() {
                 New With {.id = "sign", .name = "Sign Test", .type = "one-sample"},
                 New With {.id = "signed-rank", .name = "Wilcoxon Signed-Rank", .type = "one-sample/paired"},
-                New With {.id = "kruskal-wallis", .name = "Kruskal-Wallis H", .type = "k-independent"},
-                New With {.id = "mann-whitney", .name = "Mann-Whitney U", .type = "2-independent"},
-                New With {.id = "friedman", .name = "Friedman Test", .type = "k-related"}
+                New With {.id = "kruskal-wallis", .name = "Kruskal-Wallis H", .type = "k-independent"}
             }
         }
         WriteJson(response, health, 200)
@@ -181,22 +179,6 @@ Module Program
                 .assumptions = New String() {"Independent groups", "Ordinal/continuous", "Similar shapes"},
                 .formula = "H = 12/(N(N+1)) Σ R_i²/n_i - 3(N+1)",
                 .useCase = "Compare 3+ independent groups"
-            },
-            New With {
-                .id = "mann-whitney",
-                .name = "Mann-Whitney U Test",
-                .description = "Compare two independent groups; equivalent to Wilcoxon rank-sum.",
-                .assumptions = New String() {"Independent groups", "Ordinal", "Independence within groups"},
-                .formula = "U = n1*n2 + n1(n1+1)/2 - R1",
-                .useCase = "Two independent groups alternative to t-test"
-            },
-            New With {
-                .id = "friedman",
-                .name = "Friedman Test",
-                .description = "Nonparametric repeated measures ANOVA for k related groups.",
-                .assumptions = New String() {"Related samples", "Blocks independent", "Ordinal"},
-                .formula = "χ²_F = 12/(nk(k+1)) Σ R_j² - 3n(k+1)",
-                .useCase = "Repeated measures / randomized block design"
             }
         }
         WriteJson(response, New With {.tests = tests}, 200)
@@ -244,14 +226,8 @@ Module Program
                 Case "kruskal-wallis", "kruskal"
                     result = Statistics.KruskalWallis(input.Groups, input.Alpha)
 
-                Case "mann-whitney", "mannwhitney", "u-test", "wilcoxon-rank-sum", "rank-sum"
-                    result = Statistics.MannWhitneyUTest(input.Groups, input.Alpha, input.Alternative)
-
-                Case "friedman"
-                    result = Statistics.FriedmanTest(input.Groups, input.Alpha)
-
                 Case Else
-                    WriteJson(response, New With {.error = $"Unknown test '{input.Test}'. Available: sign, signed-rank, kruskal-wallis, mann-whitney, friedman"}, 400)
+                    WriteJson(response, New With {.error = $"Unknown test '{input.Test}'. Available: sign, signed-rank, kruskal-wallis"}, 400)
                     Return
             End Select
         Catch ex As ArgumentException

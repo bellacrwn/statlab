@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>StatLab 2.0 — Nonparametric Tests Laboratory</title>
-  <meta name="description" content="Professional nonparametric statistical analysis: Sign Test, Wilcoxon, Kruskal-Wallis, Mann-Whitney, Friedman. VB.NET backend.">
+  <meta name="description" content="Professional nonparametric statistical analysis: Sign Test, Wilcoxon Signed-Rank, and Kruskal-Wallis. VB.NET backend.">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Geist:wght@300;400;500;600;700;800&family=Geist+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -35,18 +35,18 @@
     <div class="hero container">
       <div class="hero-main">
         <div class="hero-badge">
-          <span class="badge-dot"></span> 5 NONPARAMETRIC TESTS • PRODUCTION READY
+          <span class="badge-dot"></span> 3 NONPARAMETRIC TESTS • PRODUCTION READY
         </div>
         <h1>
           <span class="h-serif">Nonparametric</span><br>
           <span class="h-accent">Test Laboratory.</span>
         </h1>
         <p class="hero-copy">
-          A polished statistics workbench for Sign, Wilcoxon Signed-Rank, Kruskal-Wallis, Mann-Whitney U & Friedman tests.
+          A polished statistics workbench for Sign, Wilcoxon Signed-Rank, and Kruskal-Wallis tests.
           Paste data, drop CSV, visualize instantly — powered by a hardened VB.NET engine with exact & approximated inference.
         </p>
         <div class="hero-meta">
-          <div class="meta-item"><strong>03→05</strong> tests expanded</div>
+          <div class="meta-item"><strong>03</strong> nonparametric tests</div>
           <div class="meta-item"><strong>CSV</strong> drag & drop</div>
           <div class="meta-item"><strong>Charts</strong> + export</div>
           <div class="meta-item"><strong>History</strong> + share</div>
@@ -102,22 +102,6 @@
           <small>3+ independent</small>
         </div>
         <div class="tab-icon">≋</div>
-      </button>
-      <button class="test-tab" data-test="mann-whitney" data-desc="2 independent groups">
-        <div class="tab-num">04</div>
-        <div class="tab-main">
-          <strong>Mann-Whitney U</strong>
-          <small>2 independent</small>
-        </div>
-        <div class="tab-icon">⇄</div>
-      </button>
-      <button class="test-tab" data-test="friedman" data-desc="k related / repeated measures">
-        <div class="tab-num">05</div>
-        <div class="tab-main">
-          <strong>Friedman</strong>
-          <small>k related • blocks</small>
-        </div>
-        <div class="tab-icon">⊞</div>
       </button>
     </section>
 
@@ -198,7 +182,7 @@
           <div id="groupsContainer" class="groups-container">
             <!-- Groups injected by JS -->
           </div>
-          <p class="hint" id="groupHint">Each group = independent sample. For Friedman, groups must have equal n (related blocks).</p>
+          <p class="hint" id="groupHint">Each group = independent sample. At least 3 groups are recommended for Kruskal-Wallis.</p>
         </div>
 
         <!-- Actions -->
@@ -240,7 +224,7 @@
           <p>Enter data and click <b>Run Analysis</b>. Charts, effect sizes, and full interpretation will be generated.</p>
           <div class="empty-features">
             <span>• Descriptive stats</span>
-            <span>• Effect size (r, η², W)</span>
+            <span>• Effect sizes (r, η²)</span>
             <span>• Visual charts</span>
             <span>• Assumptions check</span>
           </div>
@@ -339,24 +323,10 @@
           <div class="formula">H = 12/[N(N+1)]·ΣRᵢ²/nᵢ -3(N+1)</div>
           <small>Best when: 3+ groups, non-normal or ordinal outcome</small>
         </article>
-        <article class="info-card">
-          <div class="info-num">04</div>
-          <h3>Mann-Whitney U</h3>
-          <p>Two independent groups. Tests if one group stochastically larger. Equivalent to Wilcoxon rank-sum. Effect = rank-biserial.</p>
-          <div class="formula">U = n₁n₂ + n₁(n₁+1)/2 - R₁</div>
-          <small>Best when: 2 groups, alternative to t-test</small>
-        </article>
-        <article class="info-card">
-          <div class="info-num">05</div>
-          <h3>Friedman Test</h3>
-          <p>Repeated measures nonparametric ANOVA. Ranks within blocks. Use for randomized block designs.</p>
-          <div class="formula">χ²_F = 12/(nk(k+1))·ΣRⱼ² -3n(k+1)</div>
-          <small>Best when: k related samples, same subjects</small>
-        </article>
         <article class="info-card highlight">
           <div class="info-num">✦</div>
           <h3>How to choose?</h3>
-          <p><b>One sample?</b> Sign if no symmetry, Wilcoxon if symmetric.<br><b>2 independent?</b> Mann-Whitney.<br><b>3+ independent?</b> Kruskal-Wallis.<br><b>Repeated?</b> Friedman.</p>
+          <p><b>One sample?</b> Sign if no symmetry, Wilcoxon if symmetric.<br><b>3+ independent?</b> Kruskal-Wallis.</p>
           <small>Check normality with Shapiro, but prefer nonparametric for ordinal / skewed</small>
         </article>
       </div>
